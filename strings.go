@@ -88,7 +88,7 @@ func (hist *Strings) Print(width int) error {
 		if adjustedWidth < 1 {
 			return fmt.Errorf("cannot print with fewer than %d columns", 1+width-adjustedWidth)
 		}
-		fmt.Printf("%-*s %*s\n", keyLength, "Key", countLength, "Count")
+		fmt.Printf("%-*s %*s (~%.3g per *)\n", keyLength, "Key", countLength, "Count", float64(hist.largestCount)/float64(adjustedWidth))
 		for _, i := range hist.items {
 			w := adjustedWidth * i.count / hist.largestCount
 			fmt.Printf("%-*s %*d %s\n", keyLength, i.key, countLength, i.count, strings.Repeat("*", w))
@@ -117,7 +117,7 @@ func (hist *Strings) PrintWithPercent(width int) error {
 			return fmt.Errorf("cannot print with fewer than %d columns", 1+width-adjustedWidth)
 		}
 		perc := 100 / float64(hist.total)
-		fmt.Printf("%-*s %*s Percent\n", keyLength, "Key", countLength, "Count")
+		fmt.Printf("%-*s %*s Percent (~%.3g per *)\n", keyLength, "Key", countLength, "Count", float64(hist.largestCount)/float64(adjustedWidth))
 		for _, i := range hist.items {
 			w := adjustedWidth * i.count / hist.largestCount
 			fmt.Printf("%-*s %*d % 7.2f %s\n", keyLength, i.key, countLength, i.count, (float64(i.count) * perc), strings.Repeat("*", w))
