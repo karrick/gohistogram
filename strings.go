@@ -69,10 +69,8 @@ func (hist *Strings) finalize() {
 	}
 }
 
-// PrintRaw displays the histogram with three columns: Key, Count, and a histogram of stars.
+// PrintRaw displays the histogram with two columns: Key, and Count.
 func (hist *Strings) PrintRaw() error {
-	const extra = 2 // space between key and count, plus 1 to keep from final column
-
 	hist.finalize()
 
 	if len(hist.items) > 0 {
