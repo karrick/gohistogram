@@ -69,29 +69,6 @@ func (hist *Strings) finalize() {
 	}
 }
 
-// PrintRaw displays the histogram with three columns: Key, Count, and a histogram of stars.
-func (hist *Strings) PrintRaw() error {
-	const extra = 2 // space between key and count, plus 1 to keep from final column
-
-	hist.finalize()
-
-	if len(hist.items) > 0 {
-		keyLength := hist.widestKey
-		if l := len("Key"); keyLength < l {
-			keyLength = l
-		}
-		countLength := len(strconv.FormatInt(int64(hist.widthCountMax), 10)) // width of the largest number
-		if l := len("Count"); countLength < l {                              // ensure long enough for "Count"
-			countLength = l
-		}
-		for _, i := range hist.items {
-			fmt.Printf("%-*s %*d\n", keyLength, i.key, countLength, i.count)
-		}
-	}
-
-	return nil
-}
-
 // Print displays the histogram with three columns: Key, Count, and a histogram of stars.
 func (hist *Strings) Print(width int) error {
 	const extra = 3 // space between key and count, space between count and histogram, plus 1 to keep from final column
@@ -115,6 +92,27 @@ func (hist *Strings) Print(width int) error {
 		for _, i := range hist.items {
 			w := adjustedWidth * i.count / hist.widthCountMax
 			fmt.Printf("%-*s %*d %s\n", keyLength, i.key, countLength, i.count, strings.Repeat("*", w))
+		}
+	}
+
+	return nil
+}
+
+// PrintRaw displays the histogram with two columns: Key, and Count.
+func (hist *Strings) PrintRaw() error {
+	hist.finalize()
+
+	if len(hist.items) > 0 {
+		keyLength := hist.widestKey
+		if l := len("Key"); keyLength < l {
+			keyLength = l
+		}
+		countLength := len(strconv.FormatInt(int64(hist.widthCountMax), 10)) // width of the largest number
+		if l := len("Count"); countLength < l {                              // ensure long enough for "Count"
+			countLength = l
+		}
+		for _, i := range hist.items {
+			fmt.Printf("%-*s %*d\n", keyLength, i.key, countLength, i.count)
 		}
 	}
 
